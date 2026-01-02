@@ -1,0 +1,39 @@
+local Hooks = {}
+local Config
+
+function Hooks:Init()
+    Config = require(script.Parent.Config)
+
+    pcall(function()
+        LPH_NO_VIRTUALIZE = function(...) return (...) end
+
+        local newindex
+        newindex = hookmetamethod(game, "__newindex", LPH_NO_VIRTUALIZE(function(self, key, value)
+            local calling_script = getcallingscript()
+
+            if Framework and calling_script == Framework and self:IsA("Camera") and key == "CFrame" then 
+                if Toggles.NoRecoil.Value then return end
+            end
+
+            if key == "WalkSpeed" then
+                if Toggles.WalkSpeedToggle.Value then
+                    value = Options.WalkSpeed.Value
+                elseif Toggles.AntiSlow.Value then
+                    if value ~= 22 and value ~= 16 then return end
+                end
+            end
+
+            if key == "JumpPower" then
+                if Toggles.JumpPowerToggle.Value then
+                    value = Options.JumpPower.Value
+                elseif Toggles.AntiJumpCooldown.Value then
+                    value = 50
+                end
+            end
+
+            return newindex(self, key, value)
+        end))
+    end)
+end
+
+return Hooks
