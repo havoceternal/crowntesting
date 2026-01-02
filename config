@@ -1,0 +1,22 @@
+local Config = {}
+
+function Config:Init()
+    -- SERVICES
+    self.RunService       = game:GetService("RunService")
+    self.UserInputService = game:GetService("UserInputService")
+    self.Players          = game:GetService("Players")
+    self.TextChatService  = game:GetService("TextChatService")
+
+    -- PLAYER
+    self.LocalPlayer = self.Players.LocalPlayer
+    self.Character   = self.LocalPlayer.Character or self.LocalPlayer.CharacterAdded:Wait()
+    self.Humanoid    = self.Character:WaitForChild("Humanoid")
+    self.HRP         = self.Character:WaitForChild("HumanoidRootPart")
+
+    -- GENERAL
+    self.activeKeys = {
+        W=false, A=false, S=false, D=false
+    }
+end
+
+return Config
